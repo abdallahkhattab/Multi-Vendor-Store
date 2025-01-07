@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\CategoriesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,4 +21,11 @@ Route::get('/', function () {
 Route::get('/index', function () {
     return view('dashboard');
 });
+
+
+Route::get("/edit",function(){
+    return view("dashboardPages.categories.create"); 
+});
+
+Route::resource('categories', CategoriesController::class);
 

@@ -1,48 +1,32 @@
-<!--
-=========================================================
-* Argon Dashboard 3 - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard
-* Copyright 2024 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://www.creative-tim.com/license)
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
 <html lang="en">
 
+@include('dashboard.partials.header')
+<title>@yield('title',env('APP_NAME'))</title>
 
-<head>
-
-  <title>
-    @yield('title',env('APP_NAME') )  
-  </title>
-
-  @include('dashboard.partials.header')
-  
-</head>
-
-
-
-<body class="g-sidenav-show   bg-gray-100">
-  <div class="min-height-300 bg-dark position-absolute w-100"></div>
-
- @include('dashboard.partials.sidebar')
-
-  <main class="main-content position-relative border-radius-lg ">
-    <!-- Navbar -->
-   @include('dashboard.partials.navbar')
-    <!-- End Navbar -->
-    @yield('content')
-  </main>
-
-  @include('dashboard.partials.fixedPlugins')
-  <!--   Core JS Files   -->
-  @include('dashboard.partials.scripts')
-</body>
-
+	<body class="hold-transition sidebar-mini">
+		<!-- Site wrapper -->
+		<div class="wrapper">
+			<!-- Navbar -->
+			@include('dashboard.partials.navbar')
+			<!-- /.navbar -->
+			
+			<!-- Main Sidebar Container -->
+		@include('dashboard.partials.sidebar')
+			<!-- Content Wrapper. Contains page content -->
+			<div class="content-wrapper">
+				<!-- Content Header (Page header) -->
+			
+				<!-- Main content -->
+		@yield('content')
+				<!-- /.content -->
+			</div>
+			<!-- /.content-wrapper -->
+		@include('dashboard.partials.footer')
+			
+		</div>
+		<!-- ./wrapper -->
+		<!-- jQuery -->
+	@include('dashboard.partials.scripts')
+	</body>
 </html>

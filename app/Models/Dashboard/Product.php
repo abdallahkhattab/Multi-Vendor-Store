@@ -18,4 +18,13 @@ class Product extends Model
     public function store(){
         return $this->belongsTo(Store::class,'store_id','id');
     }
+
+
+    public function tags(){
+        return $this->belongsToMany(Tag::class,
+        'product_tags',
+        'product_id',
+        'tag_id'
+        );
+    }
 }
