@@ -29,3 +29,6 @@ Route::get("/edit",function(){
 
 Route::resource('categories', CategoriesController::class);
 
+Route::get('deleted-categories',[CategoriesController::class,'deletedCategories'])->name('deletedCategories');
+Route::post('deleted-categories/{id}/restore',[CategoriesController::class,'restoreDeletedCategory'])->name('categories.restore');
+Route::delete('/categories/force-delete/{id}', [CategoriesController::class, 'forceDelete'])->name('categories.forceDelete');
