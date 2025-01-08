@@ -18,7 +18,7 @@ class CategoriesController extends Controller
     protected $categoryService;
 
     public function __construct(CategoryService $categoryService){
-        
+
         $this->categoryService = $categoryService;
     }
  
@@ -50,24 +50,28 @@ class CategoriesController extends Controller
             // Validate the request
             $cleanData = $request->validated();
 
-            // Handle image upload
+
+           $category = $this->categoryService->createCategory($cleanData, $request->file('image'));
+
+            // Redirect with success message
+            return redirect()->route('categories.index')->with('success', 'Category Added Successfully');
+
+             // Handle image upload
            
            /* $imagePath = $request->hasFile('image') 
                 ? $request->file('image')->store('categories', 'public') 
                 : null;
                 */
-            $imagePath = $this->handleImageUpload($request->file('image'));
+           // $imagePath = $this->handleImageUpload($request->file('image'));
     
             // Merge the slug and image path
-            $cleanData['slug'] = Str::slug($cleanData['name']) . '-' . uniqid();
-            $cleanData['image'] = $imagePath;
+          //  $cleanData['slug'] = Str::slug($cleanData['name']) . '-' . uniqid();
+          //  $cleanData['image'] = $imagePath;
     
             // Create the category
-            $category = new Category($cleanData);
+           // $category = new Category($cleanData);
 
-            $category->save();  
-            // Redirect with success message
-            return redirect()->route('categories.index')->with('success', 'Category Added Successfully');
+           // $category->save();  
          
     }
     
@@ -95,10 +99,15 @@ class CategoriesController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        //
+        
 
         $cleanData = $request->validated();
 
+        $this->categoryService->updateCategory($category,$cleanData,$request->file('image'));
+
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully!');
+
+        /*
         if ($request->hasFile('image')) {
             // Delete the old image if it exists
             if ($category->image) {
@@ -113,9 +122,7 @@ class CategoriesController extends Controller
         
         $cleanData['slug'] = Str::slug($cleanData['name']) . '-' . uniqid();
 
-        $category->update($cleanData);
-
-        return redirect()->route('categories.index')->with('success', 'Category updated successfully!');
+        $category->update($cleanData);*/
 
     }
 
