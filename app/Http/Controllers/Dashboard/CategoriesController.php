@@ -24,13 +24,27 @@ class CategoriesController extends Controller
  
 
 
-    public function index()
+    public function index(Request $request)
     {
-        //
-        $categories = Category::paginate(5);
-        return view('dashboardPages.categories.index',compact('categories'));
-    }
+      /*  $query = Category::query(); // Create a query builder instance
+    
+        // If a search term is provided, filter the categories
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = $request->search;
+            $query->where('name', 'like', "%{$searchTerm}%")
+                  ->orWhere('slug', 'like', "%{$searchTerm}%");
+        }
+    
+        // Paginate the results
 
+        $categories = $query->paginate(10);*/
+
+        $categories = $this->categoryService->getCategories($request);
+    
+        // Return the view with the filtered categories
+        return view('dashboardPages.categories.index', compact('categories'));
+    }
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -127,7 +141,7 @@ class CategoriesController extends Controller
     }
 
 
-    public function handleImageUpload($image){
+  /*  public function handleImageUpload($image){
 
             if(!$image){
                 return null;
@@ -138,7 +152,7 @@ class CategoriesController extends Controller
         // Store the image in the public storage
         $path = $image->storeAs('categories', $imageName, 'public');
         return $path;
-    }
+    }*/
 
 
 
@@ -184,5 +198,6 @@ class CategoriesController extends Controller
 
     }
 
+   
 
 }
