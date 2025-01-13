@@ -15,7 +15,10 @@ class Category extends Model
     protected $fillable = ['name','parent_id','slug','image','description','status'];
    // protected $guards = [];
 
- 
+   public static function newFactory()
+    {
+        return \Database\Factories\CategoryFactory::new();
+    }
 
     public function products(){
 
@@ -23,10 +26,10 @@ class Category extends Model
     
     }
 
-    public function parent(){
-        return $this->belongsTo(Category::class,'parent_id','id')
-        ->withDefault(['name'=>'-']);
-    }
+    public function parent()
+{
+    return $this->belongsTo(Category::class, 'parent_id', 'id')->withDefault(['name' => '-']);
+}
 
 
     public function children(){

@@ -20,8 +20,8 @@ return new class extends Migration
             $table->float('price')->default(0);
             $table->float('compare_price')->nullable();
             $table->json('options')->nullable();
-            $table->float('rating');
-            $table->boolean('feautred')->default(0);
+            $table->float('rating')->nullable();
+            $table->boolean('featured')->default(0);
             $table->enum('status',['active','draft','archived'])->default('active');
             $table->softDeletes();
             $table->timestamps();

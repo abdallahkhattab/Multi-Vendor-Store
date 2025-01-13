@@ -15,6 +15,7 @@ class CategoriesController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     protected $categoryService;
 
     public function __construct(CategoryService $categoryService){
@@ -26,32 +27,34 @@ class CategoriesController extends Controller
 
     public function index(Request $request)
     {
-      /*  $query = Category::query(); // Create a query builder instance
-    
-        // If a search term is provided, filter the categories
-        if ($request->has('search') && !empty($request->search)) {
+
+      // $categories = Category::with('parent')->get();
+      
+        
+       $categories = Category::when($request->has('search') && !empty($request->search), function ($query) use ($request) {
             $searchTerm = $request->search;
             $query->where('name', 'like', "%{$searchTerm}%")
                   ->orWhere('slug', 'like', "%{$searchTerm}%");
-        }
-    
-        // Paginate the results
-
-        $categories = $query->paginate(10);*/
-
-        $categories = $this->categoryService->getCategories($request);
+        })
+        ->with('parent')
+        ->withCount(['products as products_number'=>function($query){
+        $query->where('status','=','active');
+        }]) //number of Active products , the default products_count
+        ->paginate(5);
     
         // Return the view with the filtered categories
         return view('dashboardPages.categories.index', compact('categories'));
     }
     
+    
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Category $categories)
     {
-        //
-    return view('dashboardPages.categories.create');
+        $categories = Category::whereNull('parent_id')->get(); 
+       
+      return view('dashboardPages.categories.create',compact('categories'));
 
     }
 
@@ -97,6 +100,10 @@ class CategoriesController extends Controller
     public function show(Category $category)
     {
         //
+
+        $products = $category->products()->paginate();
+
+        return view('dashboardPages.categories.show',compact('category','products'));
     }
 
     /**

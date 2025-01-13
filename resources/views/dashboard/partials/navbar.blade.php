@@ -19,11 +19,13 @@
     </li>
     <li class="nav-item dropdown">
       <a class="nav-link p-0 pr-3" data-toggle="dropdown" href="#">
-        <img src="img/avatar5.png" class='img-circle elevation-2' width="40" height="40" alt="">
+        <div class="profile-initials img-circle elevation-2 text-white bg-primary text-center" style="width: 40px; height: 40px; line-height: 40px;">
+          {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}{{ strtoupper(substr(explode(' ', auth()->user()->name)[1] ?? '', 0, 1)) }}
+      </div>
       </a>
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-3">
-        <h4 class="h4 mb-0"><strong>Mohit Singh</strong></h4>
-        <div class="mb-3">example@example.com</div>
+        <h4 class="h4 mb-0"><strong>{{auth()->user()->name }}</strong></h4>
+        <div class="mb-3">{{ auth()->user()->email }}</div>
         <div class="dropdown-divider"></div>
         <a href="#" class="dropdown-item">
           <i class="fas fa-user-cog mr-2"></i> Settings								
@@ -33,9 +35,14 @@
           <i class="fas fa-lock mr-2"></i> Change Password
         </a>
         <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item text-danger">
-          <i class="fas fa-sign-out-alt mr-2"></i> Logout							
-        </a>							
+        <a href="{{ route('logout') }}" class="dropdown-item text-danger"
+        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+       <i class="fas fa-sign-out-alt mr-2"></i> Logout
+     </a>
+     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+       @csrf
+     </form>
+         
       </div>
     </li>
   </ul>

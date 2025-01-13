@@ -1,66 +1,17 @@
-@extends('layouts.master')
-@section('title','Store dashboard')
-@section('content')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
 
-<section class="content-header">					
-  <div class="container-fluid my-2">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1>Dashboard</h1>
-      </div>
-      <div class="col-sm-6 text-right">
-        <a href="{{ route('categories.create') }}" class="btn btn-primary">New Category</a>
-      </div>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    {{ __("You're logged in!") }}
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <!-- /.container-fluid -->
-</section>
-
-<section class="content">
-  <!-- Default box -->
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-lg-4 col-6">							
-        <div class="small-box card">
-          <div class="inner">
-            <h3>150</h3>
-            <p>Total Orders</p>
-          </div>
-          <div class="icon">
-            <i class="ion ion-bag"></i>
-          </div>
-          <a href="#" class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-      </div>
-      
-      <div class="col-lg-4 col-6">							
-        <div class="small-box card">
-          <div class="inner">
-            <h3>50</h3>
-            <p>Total Customers</p>
-          </div>
-          <div class="icon">
-            <i class="ion ion-stats-bars"></i>
-          </div>
-          <a href="#" class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-      </div>
-      
-      <div class="col-lg-4 col-6">							
-        <div class="small-box card">
-          <div class="inner">
-            <h3>$1000</h3>
-            <p>Total Sale</p>
-          </div>
-          <div class="icon">
-            <i class="ion ion-person-add"></i>
-          </div>
-          <a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
-        </div>
-      </div>
-    </div>
-  </div>					
-  <!-- /.card -->
-</section>
-
-  @endsection
+</x-app-layout>

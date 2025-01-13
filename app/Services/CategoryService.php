@@ -26,21 +26,6 @@ class CategoryService
         return $path;
     }
 
-    public function getCategories(Request $request)
-    {
-        $query = Category::query(); // Create a query builder instance
-
-        // If a search term is provided, filter the categories
-        if ($request->has('search') && !empty($request->search)) {
-            $searchTerm = $request->search;
-            $query->where('name', 'like', "%{$searchTerm}%")
-                  ->orWhere('slug', 'like', "%{$searchTerm}%");
-        }
-
-        // Paginate the results
-        return $query->paginate(10);
-    }
-
 
     /**
      * Create a new category.

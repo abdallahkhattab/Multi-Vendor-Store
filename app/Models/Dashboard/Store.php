@@ -10,6 +10,10 @@ class Store extends Model
 {
     use HasFactory;
 
+    public static function newFactory()
+    {
+        return \Database\Factories\StoreFactory::new();
+    }
 
     public function products(){
         

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryRequest extends FormRequest
@@ -22,13 +23,19 @@ class CategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
-            'name' => 'required|string|min:3|max:225',
+            'name' => [
+                'required', 
+                'string', 
+                'min:3', 
+                'max:225', 
+                'not_in:laravel' // Corrected the spelling and syntax
+            ],    
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|in:active,archived',
             'parent_id' => 'nullable|int|exists:categories,id',
-
         ];
+        
+        
     }
 }

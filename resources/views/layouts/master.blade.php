@@ -12,7 +12,9 @@
 			<!-- /.navbar -->
 			
 			<!-- Main Sidebar Container -->
-		@include('dashboard.partials.sidebar')
+		{{-- @include('dashboard.partials.sidebar') --}}
+
+		<x-side/>
 			<!-- Content Wrapper. Contains page content -->
 			<div class="content-wrapper">
 				<!-- Content Header (Page header) -->

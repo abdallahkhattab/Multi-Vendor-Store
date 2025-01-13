@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::table('profiles', function (Blueprint $table) {
             //
-          $table->foreignId('user_id')->constrained('users')->nullOnDelete();
-           $table->primary('user_id');
+      //    $table->foreignId('user_id')->constrained('users')->nullOnDelete()->unique();
 
         });
     }
@@ -26,9 +25,8 @@ return new class extends Migration
     {
         Schema::table('profiles', function (Blueprint $table) {
             //
-            $table->dropConstrainedForeignId('user_id');
+        //   $table->dropConstrainedForeignId('user_id');
             
-
         });
     }
 };
