@@ -28,7 +28,7 @@ class ProfileRequest extends FormRequest
             'birthday' => 'nullable|date|before:today',
             'gender' => 'in:male,female',
             'country' => 'required|string|size:2',
-            'address' => 'required',
+            
 
         ];
     }
