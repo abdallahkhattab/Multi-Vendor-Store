@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Dashboard\ProductsController;
+use App\Http\Controllers\Dashboard\ProfilesController;
 use App\Http\Controllers\Dashboard\CategoriesController;
+use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\ProductsController as FrontProductsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,14 +18,12 @@ use App\Http\Controllers\Dashboard\CategoriesController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-/*
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-*/
+Route::get('/home',[HomeController::class,'index'])->name('home');
+
+Route::get('/home/products',[FrontProductsController::class,'index'])->name('home.products.index');
+Route::get('/home/products/{product:slug}',[FrontProductsController::class,'show'])->name('home.products.show');
+
+
 Route::middleware('auth')->group(function () {
    
     /*
@@ -45,6 +45,10 @@ Route::middleware('auth')->group(function () {
     
     Route::resource('categories', CategoriesController::class);
     Route::resource('products',ProductsController::class);
+    Route::get('/myprofile', [ProfilesController::class, 'edit'])->name('dashboard.profile.edit');
+    Route::patch('/myprofile/update', [ProfilesController::class, 'update'])->name('dashboard.profile.update');
+
+
     Route::get('deleted-categories',[CategoriesController::class,'deletedCategories'])->name('deletedCategories');
     Route::post('deleted-categories/{id}/restore',[CategoriesController::class,'restoreDeletedCategory'])->name('categories.restore');
     Route::delete('/categories/force-delete/{id}', [CategoriesController::class, 'forceDelete'])->name('categories.forceDelete');

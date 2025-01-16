@@ -24,7 +24,7 @@
       </div>
       </a>
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-3">
-        <h4 class="h4 mb-0"><strong>{{auth()->user()->name }}</strong></h4>
+        <h4 class="h4 mb-0"><a href="{{ route('dashboard.profile.edit') }}"><strong>{{auth()->user()->name }}</strong></a></h4>
         <div class="mb-3">{{ auth()->user()->email }}</div>
         <div class="dropdown-divider"></div>
         <a href="#" class="dropdown-item">
