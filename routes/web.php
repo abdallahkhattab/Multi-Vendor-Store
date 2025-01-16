@@ -6,6 +6,7 @@ use App\Http\Controllers\Dashboard\ProfilesController;
 use App\Http\Controllers\Dashboard\CategoriesController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\ProductsController as FrontProductsController;
+use App\Http\Middleware\CheckUserType;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,7 @@ Route::get('/home/products',[FrontProductsController::class,'index'])->name('hom
 Route::get('/home/products/{product:slug}',[FrontProductsController::class,'show'])->name('home.products.show');
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','auth.type:super-admin,admin'])->group(function () {
    
     /*
     |--------------------------------------------------------------------------
