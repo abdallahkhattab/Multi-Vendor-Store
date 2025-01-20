@@ -2,16 +2,21 @@
 
 namespace App\Observers;
 
+use Illuminate\Support\Str;
 use App\Models\Dashboard\Cart;
 
 class CartObserver
 {
     /**
-     * Handle the Cart "created" event.
+     * Handle the Cart "creating" event.
      */
-    public function created(Cart $cart): void
+    public function creating(Cart $cart): void
     {
         //
+     // Automatically generate a UUID for the cart before saving it
+
+        $cart->id  = Str::uuid();
+        $cart->cookie_id = $cart::getCookieId();
         
     }
 

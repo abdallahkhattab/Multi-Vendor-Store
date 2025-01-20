@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\ProductsController;
 use App\Http\Controllers\Dashboard\ProfilesController;
 use App\Http\Controllers\Dashboard\CategoriesController;
+use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\ProductsController as FrontProductsController;
 use App\Http\Middleware\CheckUserType;
@@ -24,6 +25,7 @@ Route::get('/home',[HomeController::class,'index'])->name('home');
 Route::get('/home/products',[FrontProductsController::class,'index'])->name('home.products.index');
 Route::get('/home/products/{product:slug}',[FrontProductsController::class,'show'])->name('home.products.show');
 
+Route::resource('cart',CartController::class);
 
 Route::middleware(['auth','auth.type:super-admin,admin'])->group(function () {
    

@@ -13,69 +13,94 @@ use Illuminate\Support\Facades\Cookie;
 class CartModelRepository implements CartRepository
 {
 
-    protected $cookieId;
+   // protected $cookieId;
 
+   protected $items;
+
+   public function __construct()
+   {
+     $this->items = collect([]);
+   }
 
     public function get(): Collection
     {
 
-          return Cart::where('cookie_id','=',$this->getCookieId())->get();
+         // return Cart::with('product')->where('cookie_id','=',$this->getCookieId())->get();
+                 /* we defined global scope in cart so the code now is*/ 
+                 //return Cart::with('product')->get();
+
+        if(!$this->items->count()){
+            $this->items = Cart::with('product')->get();
+        }
+        return $this->items;
        
     }
 
     public function add(Product $product, $quantity = 1)
     {
+        // Find the cart item for the product and cookie_id
+        $item = Cart::where('product_id', $product->id)
+            ->first();
+    
+        if (!$item) {
 
-        return Cart::create([
+               // Create a new cart item if it doesn't exist
+        $cart = Cart::create([
+            //  'cookie_id' => $this->getCookieId(),   we instead made observer 
+              'product_id' => $product->id,
+              'user_id' => Auth::id() ?? null,
+              'quantity' => $quantity,
+          ]);
+          $this->get()->push($cart);
+          return $cart;
+        }
+        // Increment the quantity if the item exists
+        $item->increment('quantity', $quantity);
 
-            'cookie_id' => $this->getCookieId(),
-            'product_id' => $product->id,
-            'user_id' => Auth::id(),
-            'quantity' => $quantity,
-
-        ]);
-   
+        
+    
     }
-
-    public function update(Product $product, $quantity = 1)
+    
+    public function update($id, $quantity = 1)
     {
 
-        Cart::where('product_id','=',$product->id)
-        ->where('cookie_id','=',$this->getCookieId())->update([
+        Cart::where('id','=',$id)
+        ->update([
             'quantity' => $quantity,
         ]);
         
     }
 
-    public function delete(Product $product)
+    public function delete($id)
     {
-       return Cart::where('id','=',$product->id)->delete();
+       return Cart::where('id','=',$id)->delete();
     }
 
 
     public function empty()
     {
-        return Cart::where('cookie_id','=',$this->getCookieId())->destroy();
+       // return Cart::delete(); //to fix error do
+      // return Cart::truncate();  // Deletes all rows and resets the auto-increment counter (not relevant for UUIDs, but still an option)
+
+
+       return Cart::query()->delete();  // Deletes all rows without resetting any auto-increment counter
+
         
     }
 
     public function total(): float
     {
-       
-       return Cart::where('cookie_id','=',$this->getCookieId())->join('products','products.id','=','carts.product_id')
+       /*
+       $total =  Cart::join('products','products.id','=','carts.product_id')
         ->selectRaw('SUM(Products.price * carts.quantity) as total')->value('total');
+        return (float) ($total ?? 0);  // Return 0 if $total is null
+*/
+        return $this->get()->sum(function($item){
+            return $item->product->price * $item->quantity;
+         });
     }
 
-    protected function getCookieId(){
-        $cookie_id = Cookie::get('cart_id');
-
-        if(!$cookie_id){
-            $cookie_id = Str::uuid();
-            Cookie::queue('cart_id', $cookie_id, Carbon::now()->addDays(30));
-        }
-
-        return $cookie_id;
-    }
+  
 
 
 }

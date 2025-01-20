@@ -11,6 +11,13 @@ use App\Repositories\Cart\CartRepository;
 
 class CartController extends Controller
 {
+
+    protected $cart;
+
+    public function __construct(CartRepository $cart )
+    {
+        $this->cart = $cart;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -26,9 +33,9 @@ class CartController extends Controller
        // $repository = App::make('cart');
         // $items = $repository->get();
 
-        $items = $cart->get();
+       // $items = $cart->get();
 
-        return view ('front.cart',compact('items'));
+        return view ('front.cart',['cart'=>$cart]);
     }
 
     /**
@@ -46,16 +53,24 @@ class CartController extends Controller
     public function store(Request $request, CartRepository $cart)
     {
         //
+       // dd($request->all());
+
         $request->validate([
             'product_id'=> 'required|int|exists:products,id',
-            'quantity'=> 'nullabl|int|min:1',
+            'quantity'=> 'nullable|int|min:1',
         ]);
+
 
        // $repository = new CartModelRepository();
 
         $product = Product::findOrFail($request->post('product_id'));
        // $repository->add($product,$request->post('quantity'));
-         $cart->add($product,$request->post('quantity'));
+        $cart->add($product,$request->post('quantity'));
+
+        if($request->expectsJson()){
+            return response()->json(['message'=>'product added to cart'],201);
+        }
+        return redirect()->route('cart.index')->with('success','Product added to cart');
 
 
     }
@@ -79,18 +94,18 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CartRepository $cart)
+    public function update(Request $request, $id)
     {
         //
         $request->validate([
-            'product_id'=> 'required|int|exists:products,id',
-            'quantity'=> 'nullabl|int|min:1',
+            //'product_id'=> 'required|int|exists:products,id',
+            'quantity'=> 'required|int|min:1',
         ]);
        // $repository = new CartModelRepository();
 
-        $product = Product::findOrFail($request->post('product_id'));
+        //$product = Product::findOrFail($request->post('product_id'));
         //$repository->update($product,$request->post('quantity'));
-        $cart->update($product,$request->post('quantity'));
+        $this->cart->update($id,$request->post('quantity'));
 
     }
 
@@ -101,6 +116,14 @@ class CartController extends Controller
     {
     
        // $repositary = new CartModelRepository();
-        $$cart->delete($id);
+        //$cart->delete($id);
+     
+        $this->cart->delete($id);
+        
+        return [
+            'message' => 'Item deleted!',
+        ];
+
+    
     }
 }

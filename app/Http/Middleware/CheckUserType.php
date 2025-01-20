@@ -27,7 +27,7 @@ class CheckUserType
         }*/
 
 
-        /* for one user type
+        /* for one user type the type value will sent by the route 
         if($user->$type != $type){
             abort(403);
         }*/

@@ -19,10 +19,13 @@ class UpdateUserLastActiveAt
         //$user = auth()->user();
         //or
         $user = $request->user();
-
-        $user->forceFill([
-            'last_active_at' =>Carbon::now(),
-        ])->save();
+        
+        if($user){
+            $user->forceFill([
+                'last_active_at' =>Carbon::now(),
+            ])->save();
+        }
+        
         return $next($request);
     }
 }
