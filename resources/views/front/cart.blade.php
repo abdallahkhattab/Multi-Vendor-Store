@@ -110,7 +110,7 @@
                                             <li>Cart Subtotal<span>{{  Currency::format($cart->total())}}</span></li>
                                             <li>Shipping<span>Free</span></li>
                                             <li>You Save<span>$29.00</span></li>
-                                            <li class="last">You Pay<span>$2531.00</span></li>
+                                            <li class="last">You Pay<span>{{  Currency::format($cart->total())}}</span></li>
                                         </ul>
                                         <div class="button">
                                             <a href="{{ route('checkout.index') }}" class="btn">Checkout</a>

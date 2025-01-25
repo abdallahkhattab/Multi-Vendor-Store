@@ -1,6 +1,3 @@
-
-    <!-- It is quality rather than quantity that matters. - Lucius Annaeus Seneca -->
-
 <input 
     type="{{ $type }}"
     name="{{ $name }}"
@@ -17,6 +14,3 @@
         {{ $message }}
     </div>
 @enderror
-
-    
-    

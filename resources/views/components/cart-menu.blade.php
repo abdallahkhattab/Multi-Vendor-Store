@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="content">
-                    <h4><a href="product-details.html">
+                    <h4><a href="{{ route('home.products.show',$item->product->slug) }}">
                         {{ $item->product->name }}</a></h4>
                     <p class="quantity">{{ $item->quantity }} - <span class="amount">{{ Currency::format($item->product->price) }}</span></p>
                 </div>
@@ -36,7 +36,7 @@
                 <span class="total-amount">{{ Currency::format($total)}}</span>
             </div>
             <div class="button">
-                <a href="checkout.html" class="btn animate">Checkout</a>
+                <a href="{{ route('checkout.index') }}" class="btn animate">Checkout</a>
             </div>
         </div>
     </div>

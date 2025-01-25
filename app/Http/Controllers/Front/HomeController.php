@@ -12,9 +12,8 @@ class HomeController extends Controller
 
     public function index(){
         $products = Product::with('category')->active()
-        ->latest()
-        ->limit(8)
+        ->take(8) // Retrieve the first 8 products from the database
         ->get();
-        return view('front.home',compact('products'));
+            return view('front.home',compact('products'));
     }
 }

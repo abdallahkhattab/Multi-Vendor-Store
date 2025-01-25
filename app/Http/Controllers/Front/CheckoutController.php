@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Front;
 
+use Throwable;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Events\OrderCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Repositories\Cart\CartRepository;
 use Symfony\Component\Intl\Countries;
-use Throwable;
+use App\Repositories\Cart\CartRepository;
 
 class CheckoutController extends Controller
 {
@@ -59,18 +60,18 @@ class CheckoutController extends Controller
                     ]);
                 }
 
-                /*
+                
                 foreach ($request->post('addr') as $type => $address) {
                     $address['type'] = $type;
                     $order->addresses()->create($address);
-                }*/
+                }
             }
-            $cart->empty();
+           // $cart->empty();
             DB::commit();
-            event('order.created');
+          //  event('order.created',$order,Auth::user());
+          event(new OrderCreated($order));
 
             //event('order.created', $order, Auth::user());
-           // event(new OrderCreated($order));
 
         } catch (Throwable $e) {
             DB::rollBack();
@@ -78,6 +79,8 @@ class CheckoutController extends Controller
         }
 
         //return redirect()->route('orders.payments.create', $order->id);
+        return redirect()->route('home');
+
     }
 
 }

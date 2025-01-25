@@ -1,3 +1,15 @@
-<div>
-    <!-- Let all your things have their places; let each part of your business have its time. - Benjamin Franklin -->
-</div>
+@props([
+    'name',
+    'placeholder' => null,
+    'options' => []
+])
+
+<select name="{{ $name }}" {{ $attributes->merge(['class' => 'form-select']) }}>
+    @if($placeholder)
+        <option value="">{{ $placeholder }}</option>
+    @endif
+
+    @foreach($options as $value => $label)
+        <option value="{{ $value }}">{{ $label }}</option>
+    @endforeach
+</select>

@@ -29,7 +29,7 @@ Route::get('home/products/{product:slug}',[FrontProductsController::class,'show'
 Route::resource('cart',CartController::class);
 
 Route::get('home/checkout',[CheckoutController::class,'create'])->name('checkout.index');
-Route::get('home/checkout/pay',[CheckoutController::class,'store'])->name('checkout.store');
+Route::post('home/checkout/pay',[CheckoutController::class,'store'])->name('checkout.store');
 
 Route::middleware(['auth','auth.type:super-admin,admin'])->group(function () {
    

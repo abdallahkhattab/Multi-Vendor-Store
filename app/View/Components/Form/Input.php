@@ -19,7 +19,7 @@ class Input extends Component
      public $class;
     // public $label;
  
-    public function __construct($type,$name,$placeholder = null,$value=null,$class='form-control')
+    public function __construct($type="text",$name,$placeholder = null,$value=null,$class='form-control')
     {
         //
 
