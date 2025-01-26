@@ -9,6 +9,7 @@
 		<div class="wrapper">
 			<!-- Navbar -->
 			@include('dashboard.partials.navbar')
+
 			<!-- /.navbar -->
 			
 			<!-- Main Sidebar Container -->

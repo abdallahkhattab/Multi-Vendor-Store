@@ -3,11 +3,13 @@
 namespace App\Notifications;
 
 use App\Models\Order;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Bus\Queueable;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Channels\BroadcastChannel;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class OrderCreatedNotification extends Notification
 {
@@ -31,7 +33,7 @@ class OrderCreatedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail','database'];
+        return ['mail','database','broadcast'];
 
         
         $channels = ['database'];
@@ -67,6 +69,33 @@ class OrderCreatedNotification extends Notification
                     ;
     }
 
+    public function toDatabase($notifiable){
+        return [
+            'order_id' => $this->order->id,
+            'order_number' => $this->order->number,
+            'order_total' => $this->order->total,
+            'store_name' => $this->order->store->name,
+            'order_status' => $this->order->status,
+            'icon' => 'fas fa-file',
+            'url' => '/',
+            'created_at' => $this->order->created_at->toDateTimeString(),
+            'message' => "New Order (#{$this->order->number}) created by {$this->order->billingAddress->name} from {$this->order->billingAddress->country_name}.",
+
+        ];
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        $addr = $this->order->billingAddress;
+        return new BroadcastMessage([
+            'message' => "A new order (#{$this->order->number}) created by {$addr->name} from {$addr->country_name}.",
+            'icon' => 'fas fa-file',
+            'url' => url('/dashboard'),
+            'order_id' => $this->order->id,
+        ]);
+    }
+
+
     /**
      * Get the array representation of the notification.
      *
@@ -78,6 +107,7 @@ class OrderCreatedNotification extends Notification
             //
             'order_id' => $this->order->id,
             'store_id' => $this->order->store_id,
+            'order_number' => $this->order->number,
 
         ];
     }

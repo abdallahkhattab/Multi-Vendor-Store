@@ -9,3 +9,8 @@
 
 <!-- AdminLTE App -->
 <script src="{{ asset('assets/dashboardAssets/js/adminlte.min.js') }}"></script>
+<!-- pusher-->
+<script>
+    const userID = "{{ Auth::id() }}";
+</script>
+<script src="{{ ('js/app.js') }}"></script>

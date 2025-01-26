@@ -62,4 +62,4 @@ Route::middleware(['auth','auth.type:super-admin,admin'])->group(function () {
     
 });
 
-require __DIR__.'/auth.php';
+//require __DIR__.'/auth.php';

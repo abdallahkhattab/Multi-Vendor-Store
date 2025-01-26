@@ -74,7 +74,7 @@ $('.item-quantity').on('change', function () {
                     console.error(xhr.responseText);
                     alert('Failed to add product to cart. Please try again.');
                 }
-            });
+        });
         });
     });
 })(jQuery);

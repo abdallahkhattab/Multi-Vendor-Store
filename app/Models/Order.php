@@ -6,6 +6,7 @@ use PDO;
 use Illuminate\Support\Carbon;
 use App\Models\Dashboard\Store;
 use App\Models\Dashboard\Product;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -16,6 +17,10 @@ class Order extends Model
     protected $fillable = [
         'store_id' , 'user_id', 'payment_method' , 'status' , 'payment_status',
     ];
+
+    public function broadcastOn(){
+        return new Channel('orders');
+    }
 
     public function store(){
         return $this->belongsTo(Store::class);
