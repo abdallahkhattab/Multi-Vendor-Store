@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
 use App\Models\User;
 use App\Models\Dashboard\Store;
 
@@ -21,7 +22,8 @@ class DatabaseSeeder extends Seeder
         Category::factory()->count(10)->create();
         Product::factory()->count(100)->create();*/
 
-        User::factory(2)->create();
+        //User::factory(2)->create();
+        Admin::factory(3)->create();
 
     }
 }

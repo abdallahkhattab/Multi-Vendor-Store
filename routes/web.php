@@ -31,7 +31,7 @@ Route::resource('cart',CartController::class);
 Route::get('home/checkout',[CheckoutController::class,'create'])->name('checkout.index');
 Route::post('home/checkout/pay',[CheckoutController::class,'store'])->name('checkout.store');
 
-Route::middleware(['auth','auth.type:super-admin,admin'])->group(function () {
+Route::middleware(['auth:admin'])->prefix('admin')->group(function () {
    
     /*
     |--------------------------------------------------------------------------
