@@ -792,7 +792,6 @@
         let diff = finaleDate - now;
         if (diff < 0) {
             document.querySelector('.alert').style.display = 'block';
-            document.querySelector('.container').style.display = 'none';
         }
 
         let days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -810,11 +809,10 @@
         document.querySelector('#hours').textContent = hours;
         document.querySelector('#minutes').textContent = minutes;
         document.querySelector('#seconds').textContent = seconds;
-
     }
     timer();
     setInterval(timer, 1000);
 </script>
 @endpush
-</x-front-layout>
 
+</x-front-layout>

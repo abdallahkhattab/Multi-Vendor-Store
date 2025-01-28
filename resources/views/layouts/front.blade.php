@@ -89,33 +89,32 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-12">
                         <div class="top-end">
-
                             @auth
-                            <div class="user">
-                                <i class="lni lni-user"></i>
-                                {{ Auth::user()->name }}
-                            </div>
-                            <ul class="user-login">
-                                <li>
-                                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout').submit()">Sign Out</a>
-                                </li>
-                                <form action="{{ route('logout') }}" id="logout" method="post" style="display:none">
-                                    @csrf
-                                </form>
-                            </ul>
+                                <div class="user">
+                                    <i class="lni lni-user"></i>
+                                    {{ Auth::user()->name ?? '' }}
+                                </div>
+                                <ul class="user-login">
+                                    <li>
+                                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout').submit()">Sign Out</a>
+                                    </li>
+                                    <form action="{{ route('logout') }}" id="logout" method="post" style="display:none">
+                                        @csrf
+                                    </form>
+                                </ul>
                             @else
-                            <div class="user">
-                                <i class="lni lni-user"></i>
-                                {{ __('Hello')}}
-                            </div>
-                            <ul class="user-login">
-                                <li>
-                                    <a href="{{ route('login') }}">{{ Lang::get('Sign In') }}</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            </ul>
+                                <div class="user">
+                                    <i class="lni lni-user"></i>
+                                    {{ __('Hello') }}
+                                </div>
+                                <ul class="user-login">
+                                    <li>
+                                        <a href="{{ route('login') }}">{{ Lang::get('Sign In') }}</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    </li>
+                                </ul>
                             @endauth
                         </div>
                     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Actions\Fortify\AuthenticateUser;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Laravel\Fortify\Fortify;
@@ -25,6 +26,9 @@ class FortifyServiceProvider extends ServiceProvider
     {
         //
         $request = request();
+
+ 
+
         if($request->is('admin/*')){
            
             Config::set('fortify.guard', 'admin');
@@ -34,16 +38,16 @@ class FortifyServiceProvider extends ServiceProvider
             $this->app->instance(LoginResponse::class, new class implements LoginResponse {
                 public function toResponse($request) {
                     if ($request->user('admin')) {
-                        return redirect()->intended('admin/dashboard');
+                        return redirect()->intended('admin/categories');
                     }
     
-                    return redirect()->intended('/');
+                    return redirect()->intended('/home');
                 }
             });
     
             $this->app->instance(LogoutResponse::class, new class implements LogoutResponse {
                 public function toResponse($request) {
-                    return redirect('/');
+                    return redirect('/home');
                 }
             });
 
@@ -61,6 +65,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
+    
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
@@ -72,6 +77,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         if(Config::get('fortify.guard') == 'web'){
+            Fortify::authenticateUsing([new AuthenticateUser,'authenticate']);
             Fortify::viewPrefix('auth.');
         }else{
             Fortify::viewPrefix('front.auth.');
