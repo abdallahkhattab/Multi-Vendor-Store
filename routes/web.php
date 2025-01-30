@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\ProductsController;
 use App\Http\Controllers\Dashboard\ProfilesController;
 use App\Http\Controllers\Dashboard\CategoriesController;
+use App\Http\Controllers\Front\Auth\TwoFactorAuthenticationController;
 use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\CheckoutController;
 use App\Http\Controllers\Front\HomeController;
@@ -30,6 +31,8 @@ Route::resource('cart',CartController::class);
 
 Route::get('home/checkout',[CheckoutController::class,'create'])->name('checkout.index');
 Route::post('home/checkout/pay',[CheckoutController::class,'store'])->name('checkout.store');
+
+Route::get('auth/user/2fa',[TwoFactorAuthenticationController::class,'index'])->name('front.2fa');
 
 Route::middleware(['auth:admin'])->prefix('admin')->group(function () {
    
