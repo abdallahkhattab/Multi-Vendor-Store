@@ -6,16 +6,37 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Dashboard\Product;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
 
 class ProductsController extends Controller
 {
+
+        // Apply the 'auth:sanctum' middleware to all routes in this controller,
+    // except for 'index' and 'show', which can be accessed publicly.
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except('index','show');
+        
+    }
+
     /**
      * Display a listing of the resource.
      */
+
+
     public function index(Request $request)
     {
         //
-        return Product::filter($request->query())->with('category:id,name', 'store:id,name', 'tags:id,name')->paginate();
+        $products =  Product::filter($request->query())
+        ->with('category:id,name', 'store:id,name', 'tags:id,name')
+        ->paginate();
+
+       // return $products;
+
+       return ProductResource::collection($products)->additional([
+        'message' => 'Product Listed successfully',
+    ]);
+
     }
 
     /**
@@ -54,7 +75,9 @@ class ProductsController extends Controller
         /*  we cant use (with) here
          return $product->with('category')->first();
         */
-        return $product->load('category:id,name', 'store:id,name', 'tags:id,name');
+        $product = $product->load('category:id,name', 'store:id,name', 'tags:id,name');
+        return new ProductResource($product);
+
     }
 
     /**
@@ -70,19 +93,22 @@ class ProductsController extends Controller
         }
 
         $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric',
+            'name' => 'sometimes|required|string|max:255',
+            'price' => 'sometimes|required|numeric',
             'description' => 'required',
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'sometimes|required|exists:categories,id',
             'status' => 'in:active,inactive',
             'compare_price' => 'nullable|numeric|gt:price',
         ]);
 
         $product->update($data);
         return response()->json([
+            'status' => 201,
             'message' => 'Product updated successfully',
-            'product' => $product
-        ]);
+            'product' => $product,
+           
+            
+        ],201);
     }
 
     /**
