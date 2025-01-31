@@ -18,7 +18,8 @@ class AccessTokensController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'device_name' => 'string|max:255'
+            'device_name' => 'string|max:255',
+            'abillities' => 'nullable|array',
         ]);
     
         // Find user by email
@@ -45,6 +46,7 @@ class AccessTokensController extends Controller
 
         //Revoke all Tokens
         // $user->tokens()->delete();
+
         // Get authenticated user
         $user = Auth::guard('sanctum')->user();
     
