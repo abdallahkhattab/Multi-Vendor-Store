@@ -52,14 +52,17 @@
                             <ul class="menu-top-link">
                                 <li>
                                     <div class="select-position">
-                                        <select id="select4">
-                                            <option value="0" selected>$ USD</option>
-                                            <option value="1">€ EURO</option>
-                                            <option value="2">$ CAD</option>
-                                            <option value="3">₹ INR</option>
-                                            <option value="4">¥ CNY</option>
-                                            <option value="5">৳ BDT</option>
-                                        </select>
+                                        <form action="{{ route('currency.store') }}" method="POST">
+                                            @csrf
+                                            <select id="currency_code">
+                                                <option value="USD" @selected('USD' == session('currency_code') )>$ USD</option>
+                                                <option value="EUR"  @selected('USD' == session('currency_code') )>€ EURO</option>
+                                                <option value="ILS"  @selected('USD' == session('currency_code') )>$ ILS</option>
+                                                <option value="JOD"  @selected('USD' == session('currency_code') )>₹ INR</option>
+                                                <option value="SAR"  @selected('USD' == session('currency_code') )>¥ CNY</option>
+                                                <option value="QAR"  @selected('USD' == session('currency_code') )>৳ BDT</option>
+                                            </select>
+                                        </form>
                                     </div>
                                 </li>
                                 <li>
@@ -81,9 +84,9 @@
                     <div class="col-lg-4 col-md-4 col-12">
                         <div class="top-middle">
                             <ul class="useful-links">
-                                <li><a href="index.html">Home</a></li>
-                                <li><a href="about-us.html">About Us</a></li>
-                                <li><a href="contact.html">Contact Us</a></li>
+                                <li><a href="index.html">{{ trans('app.home') }}</a></li>
+                                <li><a href="about-us.html">{{ trans('app.about') }}</a></li>
+                                <li><a href="contact.html">{{ __('app.contact') }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -105,7 +108,7 @@
                             @else
                                 <div class="user">
                                     <i class="lni lni-user"></i>
-                                    {{ __('Hello') }}
+                                    {{ __('app.hello') }}
                                 </div>
                                 <ul class="user-login">
                                     <li>
