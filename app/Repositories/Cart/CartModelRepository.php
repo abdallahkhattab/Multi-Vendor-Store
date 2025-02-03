@@ -43,7 +43,6 @@ class CartModelRepository implements CartRepository
             ->first();
     
         if (!$item) {
-
                // Create a new cart item if it doesn't exist
         $cart = Cart::create([
             //  'cookie_id' => $this->getCookieId(),   we instead made observer 
@@ -61,13 +60,19 @@ class CartModelRepository implements CartRepository
     
     }
     
-    public function update($id, $quantity = 1)
+    public function update($id, $quantity = 1):bool
     {
 
-        Cart::where('id','=',$id)
-        ->update([
-            'quantity' => $quantity,
-        ]);
+        $cartItem = Cart::find($id);
+
+        if ($cartItem) {
+            $cartItem->update(['quantity' => $quantity]);
+            return true;
+        }
+
+        return false;
+
+    
         
     }
 

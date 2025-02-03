@@ -8,12 +8,30 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\PersonalAccessToken;
+use PDO;
 
 class AccessTokensController extends Controller
 {
     //
 
-    public function store(Request $request) {
+    public function register(Request $request){
+
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required'],
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        
+        return response()->json(['message' => 'User registered', 'user' => $user],200);
+    }
+
+    public function login(Request $request) {
         // Validate request data
         $request->validate([
             'email' => 'required|email',
@@ -44,7 +62,7 @@ class AccessTokensController extends Controller
 
     public function destroy($token=null) {
 
-        //Revoke all Tokens
+        //Revoke all Tokens logout from all devices
         // $user->tokens()->delete();
 
         // Get authenticated user
@@ -62,6 +80,19 @@ class AccessTokensController extends Controller
         $personalAccessToken->delete();
     
         return response()->json(['message' => 'Token has been revoked'], 200);
+    }
+
+    public function LogOutFromAllDevices(){
+
+        $user = Auth::guard('sanctum')->user();
+        
+        if(!$user){
+            return response()->json(['error' => 'unauthorized'], 401);
+        }
+
+        $user->tokens()->delete();
+        return response()->json(['message' => 'Logged out from all devices'], 200);
+
     }
     
     

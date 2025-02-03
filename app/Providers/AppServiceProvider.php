@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\Json\ResourceResponse;
 use Illuminate\Support\Facades\App;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceResponse;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,7 +34,9 @@ class AppServiceProvider extends ServiceProvider
 
         Paginator::useBootstrap();
 
-        JsonResource::withoutWrapping();
+       
+    
+        //JsonResource::withoutWrapping();
         
     }
 }

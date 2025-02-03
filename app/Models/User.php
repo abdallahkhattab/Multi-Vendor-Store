@@ -14,7 +14,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable , TwoFactorAuthenticatable;
+    use HasFactory, Notifiable , TwoFactorAuthenticatable,HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -56,4 +56,5 @@ class User extends Authenticatable
     public function profile(){
         return $this->hasOne(Profile::class,'user_id','id')->withDefault();
     }
+
 }

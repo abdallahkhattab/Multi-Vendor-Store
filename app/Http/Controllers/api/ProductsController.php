@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ use App\Http\Resources\ProductResource;
 class ProductsController extends Controller
 {
 
-        // Apply the 'auth:sanctum' middleware to all routes in this controller,
+    // Apply the 'auth:sanctum' middleware to all routes in this controller,
     // except for 'index' and 'show', which can be accessed publicly.
     public function __construct()
     {
@@ -131,6 +131,6 @@ class ProductsController extends Controller
         return response()->json([
             'message' => 'Product deleted successfully',
             'deleted_product' => $deleted_product
-        ], 200); // Return HTTP 200 for successful deletion
+        ], 200);
     }
     }
