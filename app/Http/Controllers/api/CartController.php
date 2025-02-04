@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Dashboard\Cart;
 use App\Models\Dashboard\Product;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Repositories\Cart\CartRepository;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,19 +24,16 @@ class CartController extends Controller
          $this->cart = $cart;
      }
 
-    public function index()
-    {
-        //
-
-        
-
-        $cartItems = $this->cart->get();
+     public function index(Request $request,CartRepository $cart)
+     {
         return response()->json([
             'message' => 'Cart items retrieved successfully',
-            'data' => $cartItems,
+            'cart' =>$cart,
         ], 200);
-        
+
     }
+
+     
 
     /**
      * Store a newly created resource in storage.
@@ -127,5 +125,15 @@ class CartController extends Controller
     public function destroy(string $id)
     {
         //
+        $deleted = $this->cart->delete($id);
+        if (!$deleted) {
+            return response()->json([
+                'message' => 'Cart item not found',
+                ], 404);
+                }
+
+                return response()->json([
+                    'message' => 'Cart item deleted successfully',
+                ], 200);
     }
 }

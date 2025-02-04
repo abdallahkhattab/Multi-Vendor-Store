@@ -31,7 +31,7 @@ Route::delete('auth/access-tokens/{token?}',[AccessTokensController::class,'dest
 //delete all tokens
 Route::delete('logoutFromAllDevices',[AccessTokensController::class,'LogOutFromAllDevices'])->middleware('auth:sanctum');
 
-Route::get('/cart', [CartController::class, 'index']);
+Route::get('cart', [CartController::class, 'index']);
 
 Route::post('cart/add',[CartController::class,'store'])->middleware('throttle:60,1');
 

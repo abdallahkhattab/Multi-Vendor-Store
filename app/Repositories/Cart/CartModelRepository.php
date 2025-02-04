@@ -76,9 +76,9 @@ class CartModelRepository implements CartRepository
         
     }
 
-    public function delete($id)
+    public function delete($id):bool
     {
-       return Cart::where('id','=',$id)->delete();
+       return Cart::where('id','=',$id)->delete() > 0;
     }
 
 
@@ -103,6 +103,10 @@ class CartModelRepository implements CartRepository
         return $this->get()->sum(function($item){
             return $item->product->price * $item->quantity;
          });
+    }
+
+    public function getByUserId($user_id){
+        return Cart::where('user_id',$user_id);
     }
 
 

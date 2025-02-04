@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('role_user', function (Blueprint $table) {
-            $table->id();
+            // authorizable_id is the id of the user
+            //authorizable_type is the type of the user (admin,user,etc)
+            $table->morphs('authorizable');
             $table->timestamps();
         });
     }
