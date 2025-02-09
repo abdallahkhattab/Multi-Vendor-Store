@@ -18,6 +18,8 @@ interface CartRepository{
     public function empty();
 
     public function total() : float;
+
+    public function getByUserId($user_id);
     
     
 }
