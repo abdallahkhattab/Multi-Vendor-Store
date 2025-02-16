@@ -18,6 +18,7 @@ class Order extends Model
         'store_id' , 'user_id', 'payment_method' , 'status' , 'payment_status',
     ];
 
+
     public function broadcastOn(){
         return new Channel('orders');
     }
@@ -33,6 +34,10 @@ class Order extends Model
     public function products(){
         return $this->belongsToMany(Product::class,'order_items','order_id','product_id','id','id')->as('order_item')
         ->using(OrderItem::class)->withPivot(['product_name','price','quantity','options']);
+    }
+
+    public function items(){
+        return $this->hasMany(OrderItem::class);
     }
 
     public function addresses(){
