@@ -37,13 +37,18 @@ Route::resource('cart',CartController::class);
 
 Route::get('home/checkout',[CheckoutController::class,'create'])->name('checkout.index');
 Route::post('home/checkout/pay',[CheckoutController::class,'store'])->name('checkout.store');
+
 Route::get('orders/{order}/pay',[PaymentsController::class,'create'])->name('orders.payments.create');
+
 Route::post('orders/{order}/stripe/payment-intent',[PaymentsController::class,'createStripePaymentIntent'])
 ->name('stripe.paymentIntent.create');
 
+Route::get('orders/{order}/pay/stripe/callback',[PaymentsController::class,'confirm'])
+->name('stripe.return');
+
 Route::get('auth/user/2fa',[TwoFactorAuthenticationController::class,'index'])->name('front.2fa');
 
-Route::post('currency',[CurrencyConverterController::class,'store'])->name('currency.store');
+Route::post('currency',[CurrencyConverterController::class,'confirm'])->name('currency.store');
 
 
 });

@@ -44,6 +44,10 @@ class CheckoutController extends Controller
         try {
             foreach ($items as $store_id => $cart_items) {
 
+                if (empty($store_id)) {
+                    throw new \Exception("Store ID is missing for some cart items.");
+                }
+
                 $order = Order::create([
                     'store_id' => $store_id,
                     'user_id' => Auth::id(),
