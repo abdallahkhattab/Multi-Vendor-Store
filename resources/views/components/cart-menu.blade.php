@@ -36,7 +36,8 @@
                 <span class="total-amount">{{ Currency::format($total)}}</span>
             </div>
             <div class="button">
-                <a href="{{ route('checkout.index') }}" class="btn animate">Checkout</a>
+
+                <a href="{{ Auth::guest() ? route('login') : route('checkout.index') }}" class="btn animate">Checkout</a>
             </div>
         </div>
     </div>

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\ProductsController;
 use App\Http\Controllers\Api\AccessTokensController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\DeliveriesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,3 +37,5 @@ Route::get('cart', [CartController::class, 'index']);
 Route::post('cart/add',[CartController::class,'store'])->middleware('throttle:60,1');
 
 Route::put('cart/update/{id}',[CartController::class,'update']);
+
+Route::put('deliveries/{delivery}',[DeliveriesController::class,'update']);

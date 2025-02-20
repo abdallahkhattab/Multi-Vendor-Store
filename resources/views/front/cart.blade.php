@@ -113,7 +113,8 @@
                                             <li class="last">You Pay<span>{{  Currency::format($cart->total())}}</span></li>
                                         </ul>
                                         <div class="button">
-                                            <a href="{{ route('checkout.index') }}" class="btn">Checkout</a>
+                                           
+                                            <a href="{{ Auth::guest() ? route('login') : route('checkout.index') }}" class="btn">Checkout</a>
                                             <a href="{{ route('home') }}" class="btn btn-alt">Continue shopping</a>
                                         </div>
                                     </div>

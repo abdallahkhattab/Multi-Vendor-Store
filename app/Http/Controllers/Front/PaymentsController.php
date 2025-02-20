@@ -25,72 +25,76 @@ class PaymentsController extends Controller
     public function createStripePaymentIntent(Order $order)
     {
         try {
+            // Validate that the order exists and has items
             if (!$order || $order->items->isEmpty()) {
                 return response()->json(['error' => 'Order does not have any items'], 400);
             }
-
-            $amount = $order->items->sum(fn($item) => $item->price * $item->quantity);
+    
+            // Calculate the total amount in the smallest currency unit (e.g., cents for USD)
+            $amount = $order->items->sum(function ($item) {
+                return $item->price * $item->quantity;
+            });
+    
+            // Ensure the amount is an integer (convert to cents for USD)
             $amountInCents = round($amount * 100);
-
-            $stripe = new StripeClient(config('services.stripe.secret_key'));
-
-            // Create Stripe PaymentIntent
+    
+            // Initialize the Stripe client
+            $stripe = new \Stripe\StripeClient(config('services.stripe.secret_key'));
+    
+            // Create the Payment Intent
             $paymentIntent = $stripe->paymentIntents->create([
                 'amount' => $amountInCents,
                 'currency' => 'usd',
                 'payment_method_types' => ['card'],
             ]);
-
-            // Save Payment Record Before Confirmation
-            $payment = new Payment();
-            $payment->forceFill([
-                'order_id' => $order->id,
-                'payment_amount' => $amount,
-                'payment_currency' => 'usd',
-                'payment_status' => 'pending', // Mark as pending until confirmed
-                'transaction_id' => $paymentIntent->id,
-                'transaction_data' => json_encode($paymentIntent),
-                'payment_method' => 'stripe',
-            ]);
-            $payment->save();
-
+    
+            // Return the client secret
             return response()->json([
                 'clientSecret' => $paymentIntent->client_secret,
             ]);
         } catch (\Exception $e) {
-            Log::error('Stripe Payment Intent Creation Failed: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to create payment intent'], 500);
+            // Log the exception for debugging
+            \Log::error('Stripe Payment Intent Creation Failed: ' . $e->getMessage());
+    
+            // Return an error response
+            return response()->json(['error' => 'Failed to create payment intent: ' . $e->getMessage()], 500);
         }
     }
 
     public function confirm(Request $request, Order $order)
     {
-        try {
-            $stripe = new StripeClient(config('services.stripe.secret_key'));
+          // Initialize the Stripe client
+          $stripe = new \Stripe\StripeClient(config('services.stripe.secret_key'));
 
-            // Retrieve the payment intent from Stripe
-            $paymentIntent = $stripe->paymentIntents->retrieve($request->query('payment_intent'), []);
+        $paymentIntent = $stripe->paymentIntents->retrieve($request->query('payment_intent'),[] );
 
-            if ($paymentIntent->status === 'succeeded') {
-                // Find the corresponding payment record and update its status
-                $payment = Payment::where('transaction_id', $paymentIntent->id)->first();
+    
+        if($paymentIntent->status == 'succeeded'){
 
-                if ($payment) {
-                    $payment->update([
-                        'payment_status' => 'completed',
-                        'transaction_data' => json_encode($paymentIntent),
-                    ]);
+        $payment = new Payment();
+            // Update the order status to "paid"
+            $payment->forceFill([
+                'order_id' =>$order->id,
+                'payment_amount' => $paymentIntent->amount /100,
+                'payment_currency' => $paymentIntent->currency,
+                'payment_status' => 'completed',
+                'transaction_id' => $paymentIntent->id,
+                'transaction_data' => json_encode($paymentIntent),
+                'payment_method' => 'stripe',
 
-                    event('payment.created', $payment->id);
-                }
+           ]);
 
-                return redirect()->route('home', ['status' => 'payment-succeeded']);
-            } else {
-                return redirect()->route('home', ['status' => 'payment-failed']);
-            }
-        } catch (\Exception $e) {
-            Log::error('Stripe Payment Confirmation Failed: ' . $e->getMessage());
-            return redirect()->route('home', ['status' => 'payment-error']);
+           $payment->save();
+
+           event('payment.created' , $payment->id);
+
+           return redirect()->route('home',[
+            'status' => 'payment-succeeded',
+           ]);
         }
+
+
+        
     }
+
 }
